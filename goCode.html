@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <meta charset="utf-8" />
-    <script src="js-flie.js" defer></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
@@ -15,66 +13,88 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
-    <title>DOM THINGS</title>
-
-    <style>
-      li {
-        margin-bottom: 10px;
-      }
-
-      li button {
-        font-size: 8px;
-        margin-left: 20px;
-        color: #666;
-      }
-    </style>
+    <title>Rock Paper Scissors</title>
 
   </head>
 
   <body>
-
-    <h1>My shopping list</h1>
-
-    <div>
-      <label for="item">Enter a new item:</label>
-      <input type="text" name="item" id="item">
-      <button>Add item</button>
-    </div>
-
-    <ul>
-
-    </ul>
+    <h1>Rock Paper Scissors</h1>
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+    <p id="result"></p>
+    <p id="score">Player: 0 | Computer: 0</p>
 
     <script>
-      const list = document.querySelector('ul');
-      const input = document.querySelector('input');
-      const button = document.querySelector('button');
+        let playerScore = 0;
+        let computerScore = 0;
+        const winningScore = 5;
+
+        function playRound(playerSelection) {
+            // Add the game logic here
+            const options = ["Rock", "Paper", "Scissors"];
+            const computerSelection = options[Math.floor(Math.random() * 3)];
+            console.log(`Computer selected: ${computerSelection}`);
+            console.log(`Player selected: ${playerSelection}`);
+            let result;
 
 
-      button.addEventListener('click', () => {
-        const myItem = input.value;
-        input.value = '';
+            if (playerSelection === computerSelection) {
+                result = "It's a tie!";
+            } else if (
+                (playerSelection === "Rock" && computerSelection === "Scissors") ||
+                (playerSelection === "Paper" && computerSelection === "Rock") ||
+                (playerSelection === "Scissors" && computerSelection === "Paper")
+            ) {
+              playerScore++;
+                result = "You win!";
+            } else {
+                computerScore++;
+                result = "Computer wins!";
+            }
 
-        const listItem = document.createElement('li');
-        const listText = document.createElement('span');
-        const listBtn = document.createElement('button');
+            // Update the score display
+            document.getElementById("score").innerHTML = `Player: ${playerScore} | Computer: ${computerScore}`;
 
-        listItem.appendChild(listText);
-        listText.textContent = myItem;
-        listItem.appendChild(listBtn);
-        listBtn.textContent = 'Delete';
-        list.appendChild(listItem);
+            if (playerScore === winningScore) {
+                result = "Player wins the game!";
+                disableButtons();
+            } else if (computerScore === winningScore) {
+                result = "Computer wins the game!";
+                disableButtons();
+            }
 
-        listBtn.addEventListener('click', () => {
-          list.removeChild(listItem);
-        
-         });
+            // Display the result
+            console.log(result);
+            document.getElementById("result").innerHTML = `Player selected: ${playerSelection}<br>
+             Computer selected: ${computerSelection}<br>
+             Result:${result}`;
+        }
 
-         input.focus();
-      
-      });
+        // Get the buttons by their IDs
+        const rockButton = document.getElementById("rock");
+        const paperButton = document.getElementById("paper");
+        const scissorsButton = document.getElementById("scissors");
 
-    
-  
+        // Function to disable buttons when the game is over
+        function disableButtons() {
+        rockButton.disabled = true;
+        paperButton.disabled = true;
+        scissorsButton.disabled = true;
+        }
+
+        // Add event listeners to the buttons
+        rockButton.addEventListener("click", function () {
+            playRound("Rock");
+        });
+
+        paperButton.addEventListener("click", function () {
+            playRound("Paper");
+        });
+
+        scissorsButton.addEventListener("click", function () {
+            playRound("Scissors");
+        });
     </script>
+    
   </body>
